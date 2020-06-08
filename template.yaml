@@ -14,9 +14,12 @@ Resources:
       Runtime: python3.7
 
 Outputs:
-  HelloWorldFunction:
+  AuthFunction:
     Description: "Hello World Lambda Function ARN"
-    Value: !GetAtt HelloWorldFunction.Arn
-  HelloWorldFunctionIamRole:
+    Value: !GetAtt AuthFunction.Arn
+    Export:
+      Name:
+        Fn::Sub: ${AWS::StackName}-AuthFunction
+  AuthFunctionIamRole:
     Description: "Implicit IAM Role created for Hello World function"
-    Value: !GetAtt HelloWorldFunctionRole.Arn
+    Value: !GetAtt AuthFunctionRole.Arn
