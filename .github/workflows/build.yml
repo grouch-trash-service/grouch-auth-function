@@ -39,10 +39,10 @@ jobs:
 
     - name: Run local Cucumber Tests
       run: |
-      sam local start-lambda &
-      sam_pid=$!
-      behave -D local
-      kill $sam_pid
+        sam local start-lambda &
+        sam_pid=$!
+        behave -D local
+        kill $sam_pid
 
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
