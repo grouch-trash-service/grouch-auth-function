@@ -40,6 +40,7 @@ jobs:
     - name: Run local Cucumber Tests
       run: |
         sam local start-lambda &
+        sleep 5
         sam_pid=$!
         behave -D local
         kill $sam_pid
