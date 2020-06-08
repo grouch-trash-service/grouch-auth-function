@@ -37,6 +37,9 @@ jobs:
     - name: Sam Build
       run: sam build
 
+    - name: Run local Cucumber Tests
+      run: behave -D local
+
     - name: SonarCloud Scan
       uses: sonarsource/sonarcloud-github-action@master
       env:
@@ -58,3 +61,6 @@ jobs:
 
     - name: Deploy Sam templates
       run: sam deploy --no-fail-on-empty-changeset
+
+    - name: validate using Cucumber tests
+      run: behave

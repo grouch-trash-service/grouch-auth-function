@@ -9,6 +9,7 @@ Resources:
   AuthFunction:
     Type: AWS::Serverless::Function
     Properties:
+      FunctionName: AuthFunction
       CodeUri: auth/
       Handler: authorizer.lambda_handler
       Runtime: python3.7

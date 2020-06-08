@@ -25,7 +25,9 @@ def authenticating(context):
     """
     :type context: behave.runner.Context
     """
-    lambda_client = boto3.client('lambda',
+    env = context.config.userdata.get('local', 'false')
+    if env == 'true':
+        lambda_client = boto3.client('lambda',
                                  region_name='us-east-1',
                                  endpoint_url='http://127.0.0.1:3001',
                                  use_ssl=False,
@@ -36,6 +38,8 @@ def authenticating(context):
                                      retries={'max_attempts': 0}
                                  )
                                  )
+    else:
+        lambda_client = boto3.client('lambda')
     event = {
         'authorizationToken': context.password,
         'methodArn': 'arn:aws:cucumber-test'
