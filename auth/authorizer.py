@@ -14,7 +14,6 @@ def lambda_handler(event, context):
     :param context: lambda context
     :return: auth policy denoting whether the user is authenticated or not
     """
-    print(event)
     print(context)
     if event['authorizationToken'] == get_secret():
         effect = 'Allow'
