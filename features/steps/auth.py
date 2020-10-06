@@ -53,7 +53,11 @@ def valid_auth_token(context):
     """
     :type context: behave.runner.Context
     """
-    context.password = 'password'
+    secret_name = "grouch/apiKey"
+    session = boto3.session.Session()
+    client = session.client('secretsmanager')
+    secret_value_response = client.get_secret_value(SecretId=secret_name)
+    context.password = secret_value_response['SecretString']
 
 
 @given("an invalid authorization token")

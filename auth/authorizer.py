@@ -2,6 +2,10 @@
 authorizer module for invoking lambda function to do authentication
 """
 
+import boto3
+
+SECRET_NAME = "grouch/apiKey"
+
 
 def lambda_handler(event, context):
     """
@@ -12,7 +16,7 @@ def lambda_handler(event, context):
     """
     print(event)
     print(context)
-    if event['authorizationToken'] == 'password':
+    if event['authorizationToken'] == get_secret():
         effect = 'Allow'
         principal = 'user'
     else:
@@ -33,3 +37,14 @@ def lambda_handler(event, context):
             ]
         }
     }
+
+
+def get_secret() -> str:
+    """
+    gets secret from secretsmanager
+    :return:
+    """
+    session = boto3.session.Session()
+    client = session.client('secretsmanager')
+    secret_value_response = client.get_secret_value(SecretId=SECRET_NAME)
+    return secret_value_response['SecretString']

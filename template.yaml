@@ -13,6 +13,7 @@ Resources:
       CodeUri: auth/
       Handler: authorizer.lambda_handler
       Runtime: python3.7
+      Timeout: 120
 
 Outputs:
   AuthFunction:

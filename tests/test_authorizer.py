@@ -1,10 +1,16 @@
 from unittest import TestCase
+from unittest.mock import patch, MagicMock
+
+import boto3
+
 from auth import authorizer
 
 
 class Test(TestCase):
-    def test_valid_auth(self):
+    @patch('boto3.session')
+    def test_valid_auth(self, test_session):
         password = 'password'
+        Test.__mock_boto3_session(test_session)
         event = {'authorizationToken': password, 'methodArn': 'arn'}
         expected_response = Test.__expected_auth_response('user', 'Allow', event['methodArn'])
 
@@ -20,6 +26,13 @@ class Test(TestCase):
         response = authorizer.lambda_handler(event, None)
 
         self.assertEqual(expected_response, response)
+
+    @patch('boto3.session')
+    def test_get_secret(self, test_session):
+        Test.__mock_boto3_session(test_session)
+
+        password = authorizer.get_secret()
+        self.assertEqual('password', password)
 
     @staticmethod
     def __expected_auth_response(principal, effect, resource):
@@ -37,3 +50,11 @@ class Test(TestCase):
                 ]
             }
         }
+
+    @staticmethod
+    def __mock_boto3_session(test_session):
+        client = boto3.client('secretsmanager')
+        session = boto3.session.Session()
+        client.get_secret_value = MagicMock(return_value={'SecretString': 'password'})
+        session.client = MagicMock(return_value=client)
+        test_session.Session = MagicMock(return_value=session)
