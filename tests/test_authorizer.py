@@ -55,6 +55,6 @@ class Test(TestCase):
     def __mock_boto3_session(test_session):
         client = boto3.client('secretsmanager')
         session = boto3.session.Session()
-        client.get_secret_value = MagicMock(return_value={'SecretString': 'password'})
+        client.get_secret_value = MagicMock(return_value={'SecretString': '{"API_KEY": "password"}'})
         session.client = MagicMock(return_value=client)
         test_session.Session = MagicMock(return_value=session)

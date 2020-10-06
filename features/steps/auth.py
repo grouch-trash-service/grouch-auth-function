@@ -4,6 +4,7 @@ step defs for behave tests
 import json
 import boto3
 import botocore
+import json
 
 from behave import use_step_matcher, given, when, then
 
@@ -57,7 +58,7 @@ def valid_auth_token(context):
     session = boto3.session.Session()
     client = session.client('secretsmanager')
     secret_value_response = client.get_secret_value(SecretId=secret_name)
-    context.password = secret_value_response['SecretString']
+    context.password = json.loads(secret_value_response['SecretString'])['API_KEY']
 
 
 @given("an invalid authorization token")
